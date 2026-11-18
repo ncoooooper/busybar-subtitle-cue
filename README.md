@@ -22,7 +22,7 @@ Hold a difficult line in view during rehearsal and restart from its timestamp. Y
 
 ## Example from the emulator
 
-The test script has three cues. Seeking to the second lands exactly at 00:05. The front is a timing reference for the speaker while the rear carries the actual rehearsal text. Actual SRT parser, playback clock and a three-cue rehearsal script.
+The test script has three cues. Seeking to the second lands exactly at 00:05. The front is a timing reference for the speaker while the rear carries the actual rehearsal text. The companion parsed a local three-cue SRT file and ran the rehearsal clock.
 
 ## Set up the source
 
