@@ -4,6 +4,6 @@
   "name": "Subtitle Cue",
   "version": "0.1.0",
   "api_version": "27.12.0",
-  "description": "Subtitle Cue",
+  "description": "Rehearse a timed SRT script, pause on a line and seek directly between subtitle cues.",
   "author": "ncoooooper"
 }

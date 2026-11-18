@@ -1,0 +1,27 @@
+{
+  "id": "BB-046",
+  "source": "Actual SRT parser, playback clock and a three-cue rehearsal script.",
+  "scenario": "Sought to the second cue, started and paused playback, stepped back, then returned to the second cue at 00:05.",
+  "keys": [
+    "up",
+    "ok",
+    "ok",
+    "down",
+    "up"
+  ],
+  "frames": 54,
+  "distinct_frames": 17,
+  "exit": "App io.ncoooooper.subtitlecue exited: finished; heap peak 79.3 of 128 KiB",
+  "sha256": "2d0fab83e8b997a6d5448453b673a1509660e059ac6ab158bf58300d7fe2ceb1",
+  "interactive": {
+    "caption": "PAUSE   2/3",
+    "value": "00:05",
+    "lines": [
+      "00:00:05 - 00:00:12",
+      "The lights turn blue.",
+      "Page 1/1  /  hold OK",
+      "Wheel: cue / Click: play"
+    ],
+    "version": "1-PAUSE"
+  }
+}

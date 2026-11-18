@@ -1,66 +1,22 @@
-import { device } from "@shared/device";
-import { column, render, type Node } from "@busy-app/busy-lib";
-import manifest from "./appmeta/manifest.json";
-
-/** The name the app draws under; the device clears elements by this id. */
-const APP = manifest.id;
-
-/** How often the screen is redrawn. */
-const TICK_MS = 1000;
-
-const WHITE = "#FFFFFFFF";
-const SUBTLE_WHITE = "#FFFFFF80";
-
-/**
- * The frame drawn on every tick. The screen is 72×16, so two short lines are about all that fits.
- */
-function frame(ticks: number): Node {
-  return column({ justify: "center", align: "center" }, [
-    { type: "text", id: "title", text: "Hello", font: "bold", color: WHITE },
-    {
-      type: "text",
-      id: "ticks",
-      text: String(ticks),
-      font: "small",
-      color: SUBTLE_WHITE,
-    },
-  ]);
+import {surface,panel,label,rect,type Frame,type Key} from "@shared/surface";
+import {loadValues} from "@shared/settings";
+type Data={caption:string;value:string;lines:string[];version:string;pixels?:string[];palette?:string[];error?:string};
+let addr="",closed=false,busy=false,reading:Data|undefined,failed=false;const commands:Key[]=[];
+let timer:ReturnType<typeof setTimeout>|undefined;
+function draw():Frame{
+ const p=reading,frame:Frame=[];if(p?.pixels&&p.palette){
+   for(let y=0;y<p.pixels.length;y++){const row=p.pixels[y];for(let x=0;x<row.length;){let end=x+1;while(end<row.length&&row[end]===row[x])end++;
+    const color=p.palette[Number(row[x])];if(color&&color!=="#000000")frame.push(rect("px"+y+"-"+x,2+x*2,1+y,(end-x)*2,1,color+"FF"));x=end;}}
+   frame.push(label("side",p.caption,51,0,"#82AFD2"+"FF","front","tiny"),label("n",p.value,52,6,"#FFF2D7FF","front","small"));
+ }else frame.push(label("head",p?.caption||"Subtitle Cue",1,0,"#82AFD2"+"FF","front","tiny"),label("n",p?.value||(addr?"Offline":"Set URL"),1,6,"#FFF2D7FF"));
+ return frame.concat(panel("Subtitle Cue".toUpperCase(),failed?["Companion unavailable",...(p?p.lines.slice(0,4):["Check host and local URL"])]:p?.lines||["Set companion URL in settings","Start the local reader"]));}
+async function next(){
+ if(!addr||busy||closed)return;if(timer!==undefined)clearTimeout(timer);timer=undefined;busy=true;
+ const key=commands.shift();try{
+ const res=await fetch(addr,key?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({key})}:undefined);
+ if(!res.ok)throw Error("HTTP "+res.status);const data=await res.json() as Data;if(data.error||typeof data.value!=="string"||!Array.isArray(data.lines))throw Error("Bad frame");
+ const changed=!!reading&&reading.version!==data.version;reading=data;failed=false;if(!closed)refresh(changed?"change":undefined);
+ }catch(e){failed=true;if(!closed)refresh();}finally{busy=false;if(!closed)timer=setTimeout(()=>{timer=undefined;void next();},commands.length?5:failed?1800:350);}
 }
-
-/** Sends one frame to the device. */
-async function draw(ticks: number): Promise<void> {
-  const elements = render(frame(ticks));
-  await device.DisplayDraw({ application_name: APP, priority: 50, elements });
-}
-
-/**
- * Entry point, called at the end of the file: the device runs this script from top to bottom and starts nothing by itself.
- */
-function main(): void {
-  let ticks = 0;
-  let stopped = false;
-
-  const report = (err: unknown) =>
-    console.error(`${APP}: ${err instanceof Error ? err.message : String(err)}`);
-
-  void draw(ticks).catch(report);
-
-  // Tick errors are reported, not thrown: one failed request must not stop the loop.
-  const timer = setInterval(() => {
-    ticks += 1;
-    void draw(ticks).catch(report);
-  }, TICK_MS);
-
-  // Back leaves the app. Once the timer is cleared and the handler detached, nothing keeps it alive and the device takes the screen back.
-  const unbind = listen("input", (event) => {
-    if (stopped || event.key !== "back" || event.action !== "short") return;
-
-    stopped = true;
-    clearInterval(timer);
-
-    // Not detached from inside the handler itself: with nothing else left the unbind stops the app on the spot, while this handler is still running.
-    setTimeout(unbind, 0);
-  });
-}
-
-main();
+const refresh=surface(draw,k=>{if(!addr)return;if(commands.length<32)commands.push(k);void next();},()=>{closed=true;if(timer!==undefined)clearTimeout(timer);},{motif:"bookmark",color:"#82AFD2",shine:"#FFEBD8"});
+void loadValues().then(v=>{if(closed)return;addr=String(v?.bridge||"").trim();refresh();void next();});
