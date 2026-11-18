@@ -18,5 +18,5 @@ async function next(){
  const changed=!!reading&&reading.version!==data.version;reading=data;failed=false;if(!closed)refresh(changed?"change":undefined);
  }catch(e){failed=true;if(!closed)refresh();}finally{busy=false;if(!closed)timer=setTimeout(()=>{timer=undefined;void next();},commands.length?5:failed?1800:350);}
 }
-const refresh=surface(draw,k=>{if(!addr)return;if(commands.length<32)commands.push(k);void next();},()=>{closed=true;if(timer!==undefined)clearTimeout(timer);},{motif:"bookmark",color:"#82AFD2",shine:"#FFEBD8"});
+const refresh=surface(draw,k=>{if(!addr)return;if(commands.length<32)commands.push(k);void next();},()=>{closed=true;if(timer!==undefined)clearTimeout(timer);},{enabled:false});
 void loadValues().then(v=>{if(closed)return;addr=String(v?.bridge||"").trim();refresh();void next();});

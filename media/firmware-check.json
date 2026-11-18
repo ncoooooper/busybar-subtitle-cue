@@ -12,7 +12,7 @@
   "frames": 54,
   "distinct_frames": 17,
   "exit": "App io.ncoooooper.subtitlecue exited: finished; heap peak 79.3 of 128 KiB",
-  "sha256": "74fb5b3b8ece3bb226a50ab7cc0030d37fc724fdce9cb8879e1df8c131873fb6",
+  "sha256": "42603c867dffd4c1a8c79fe4aa07db3f450dc4297136bbe48c564f697f8697c2",
   "interactive": {
     "caption": "PAUSE   2/3",
     "value": "00:05",
@@ -40,9 +40,9 @@
     ],
     "frames": 144,
     "distinct_by_flow": [
-      13,
-      13
+      3,
+      3
     ],
-    "exit": "App io.btype.subtitlecue exited: finished; heap peak 86.1 of 128 KiB"
+    "exit": "App io.btype.subtitlecue exited: finished; heap peak 84.6 of 128 KiB"
   }
 }
