@@ -1,7 +1,7 @@
 {
   "name": "busybar-subtitle-cue",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rehearse a timed SRT script, pause on a line and seek directly between subtitle cues.",
   "author": "ncoooooper",
   "type": "module",

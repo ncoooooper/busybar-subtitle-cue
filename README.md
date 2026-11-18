@@ -4,6 +4,20 @@ Rehearse a timed SRT script, pause on a line and seek directly between subtitle 
 
 Hold a difficult line in view during rehearsal and restart from its timestamp. You can loop the troublesome part of a script while leaving the source subtitles intact.
 
+## Screen transitions
+
+Seek to a subtitle, then return to the same exchange for a second reading.
+
+![Subtitle Cue front display. Seek to a subtitle, then return to the same exchange for a second reading.](media/guide/screen-transitions.gif)
+
+<details>
+
+<summary>Watch the rear display</summary>
+
+![Subtitle Cue rear display during the recorded controls](media/guide/screen-transitions-rear.gif)
+
+</details>
+
 ## Seek to the line you need
 
 1. Start the local reader with your timed SRT script. Check the cue number and timestamp on the front and the words on the rear.
@@ -38,6 +52,6 @@ Open BUSY Bar Emulator. From this repository, run:
 
 Press **Back** to exit.
 
-The GIFs are excerpts from the emulator recording. Each front-display pixel is shown at 9× its original width and height. The end frames pause for reading.
+The GIFs are excerpts from the emulator recording. Each LED occupies a 16 × 16 cell with a black border. The end frames pause for reading.
 
 [Full recording](media/controls.mp4) · [Rear display](screenshots/back-1.png) · [Firmware test](EMULATOR-QA.md) · [MIT license](LICENSE)
